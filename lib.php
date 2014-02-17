@@ -26,23 +26,29 @@
 
 function block_profileselectorhtml_pluginfile($course, $birecord_or_cm, $context, $filearea, $args, $forcedownload) {
     global $SCRIPT;
-
+    
     if ($context->contextlevel != CONTEXT_BLOCK) {
         send_file_not_found();
     }
 
     require_course_login($course);
 
-    if (!in_array($filearea, array('content', 'match', 'nomatch'))) {
+    if (!in_array($filearea, array('text_match', 'text_nomatch', 'text_all'))) {
         send_file_not_found();
     }
 
     $fs = get_file_storage();
+    
+    if ($filearea == 'text_match'){
+	    $itemid = array_shift($args);
+	} else {
+		$itemid = 0;
+	}
 
     $filename = array_pop($args);
     $filepath = $args ? '/'.implode('/', $args).'/' : '/';
 
-    if (!$file = $fs->get_file($context->id, 'block_profileselectorhtml', $filearea, 0, $filepath, $filename) or $file->is_directory()) {
+    if (!$file = $fs->get_file($context->id, 'block_profileselectorhtml', $filearea, $itemid, $filepath, $filename) or $file->is_directory()) {
         send_file_not_found();
     }
 

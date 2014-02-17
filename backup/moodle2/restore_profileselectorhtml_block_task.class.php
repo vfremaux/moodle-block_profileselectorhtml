@@ -22,33 +22,36 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+require_once 'restore_profileselectorhtml_stepslib.php';
+
 /**
  * Specialised restore task for the html block
  * (requires encode_content_links in some configdata attrs)
  *
  * TODO: Finish phpdocs
  */
-class restore_prfileselectorhtml_block_task extends restore_block_task {
+class restore_profileselectorhtml_block_task extends restore_block_task {
 
     protected function define_my_settings() {
     }
 
     protected function define_my_steps() {
+        $this->add_step(new restore_profileselectorhtml_block_structure_step('profileselectorhtml_structure', 'profileselectorhtml.xml'));
     }
 
     public function get_fileareas() {
-        return array('content');
+        return array('text_nomatch', 'text_all', 'text_match');
     }
 
     public function get_configdata_encoded_attributes() {
-        return array('text'); // We need to encode some attrs in configdata
+        return array('text_nomatch', 'text_all'); // We need to encode some attrs in configdata
     }
 
     static public function define_decode_contents() {
 
         $contents = array();
 
-        $contents[] = new restore_html_block_decode_content('block_instances', 'configdata', 'block_instance');
+        $contents[] = new restore_profileselectorhtml_block_decode_content('block_instances', 'configdata');
 
         return $contents;
     }
@@ -63,7 +66,7 @@ class restore_prfileselectorhtml_block_task extends restore_block_task {
  * field, to serve the configdata->text content to the restore_decode_processor
  * packaging it back to its serialized form after process
  */
-class restore_html_block_decode_content extends restore_decode_content {
+class restore_profileselectorhtml_block_decode_content extends restore_decode_content {
 
     protected $configdata; // Temp storage for unserialized configdata
 
