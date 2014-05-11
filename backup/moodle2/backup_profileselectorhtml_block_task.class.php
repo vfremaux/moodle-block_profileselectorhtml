@@ -15,6 +15,8 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+require_once 'backup_profileselectorhtml_stepslib.php';
+
 /**
  * @package moodlecore
  * @subpackage backup-moodle2
@@ -28,20 +30,22 @@
  *
  * TODO: Finish phpdocs
  */
-class backup_prfileselectorhtml_block_task extends backup_block_task {
+class backup_profileselectorhtml_block_task extends backup_block_task {
 
     protected function define_my_settings() {
     }
 
     protected function define_my_steps() {
+        // page_module has one structure step
+        $this->add_step(new backup_profileselectorhtml_block_structure_step('profileselectorhtml_structure', 'profileselectorhtml.xml'));
     }
 
     public function get_fileareas() {
-        return array('config_text_nomatch','config_text_all','text_match');
+        return array('text_nomatch', 'text_all', 'text_match');
     }
 
     public function get_configdata_encoded_attributes() {
-        return array('text'); // We need to encode some attrs in configdata
+        return array('config_text_nomatch', 'config_text_all'); // We need to encode some attrs in configdata
     }
 
     static public function encode_content_links($content) {
