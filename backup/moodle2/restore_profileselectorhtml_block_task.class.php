@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -22,7 +21,7 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require_once 'restore_profileselectorhtml_stepslib.php';
+require_once($CFG->dirroot.'/blocks/profileselectorhtml/backup/moodle2/restore_profileselectorhtml_stepslib.php');
 
 /**
  * Specialised restore task for the html block
@@ -48,11 +47,8 @@ class restore_profileselectorhtml_block_task extends restore_block_task {
     }
 
     static public function define_decode_contents() {
-
         $contents = array();
-
         $contents[] = new restore_profileselectorhtml_block_decode_content('block_instances', 'configdata');
-
         return $contents;
     }
 
@@ -68,7 +64,8 @@ class restore_profileselectorhtml_block_task extends restore_block_task {
  */
 class restore_profileselectorhtml_block_decode_content extends restore_decode_content {
 
-    protected $configdata; // Temp storage for unserialized configdata
+    // Temp storage for unserialized configdata.
+    protected $configdata;
 
     protected function get_iterator() {
         global $DB;

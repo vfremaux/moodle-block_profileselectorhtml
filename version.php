@@ -15,18 +15,22 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version details
+ * Version details.
  *
- * @package    block
- * @subpackage profileselectorhtml
- * @author     valery fremaux (valery.fremaux@gmail.com)
- * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package     block_profileselectorhtml
+ * @category    blocks
+ * @author      valery fremaux <valery.fremaux@gmail.com>
+ * @copyright   2011 onwards Valery Fremaux (http://www.mylearningfactory.com)
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2013072001;        // The current plugin version (Date: YYYYMMDDXX)
-$plugin->requires  = 2013111802;        // Requires this Moodle version
+$plugin->version   = 2016083100;        // The current plugin version (Date: YYYYMMDDXX)
+$plugin->requires  = 2015111000;        // Requires this Moodle version
 $plugin->component = 'block_profileselectorhtml';  // Full name of the plugin (used for diagnostics)
-$plugin->maturity = MATURITY_BETA;  
-$plugin->release = '2.6.0 (build 2013072000)'; 
+$plugin->maturity = MATURITY_RC;
+$plugin->release = '3.0.0 (build 2016083100)';
+
+// Non Moodle attributes.
+$plugin->codeincrement = '3.0.0000';

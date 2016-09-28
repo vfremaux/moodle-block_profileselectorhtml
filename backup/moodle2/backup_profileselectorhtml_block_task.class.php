@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -52,4 +51,3 @@ class backup_profileselectorhtml_block_task extends backup_block_task {
         return $content; // No special encoding of links
     }
 }
-

@@ -1,0 +1,52 @@
+Profileseletorhtml block is a simple block that allows displaying contextual
+content depending on some user fiedls having some specific values. It is part
+of the enhanced HTML blocks set with profilespecificHtml, groupSpecificHtml
+editableContentHtml and roleSpecificHtml. 
+
+ProfilepspecificHtml block can switch content using up to 2 fields conditions. 
+Fields can be usual standard fields of the user profile, or any custom profile field.
+
+Distinct ocntent are attqched to a "rule", that is, a combination of expression
+testing the value of a given field. 
+
+Operators are : 
+
+=
+>
+<
+!=
+~= (like)
+
+You may combine both statements with a logical AND or a logical OR operator,
+or ignore the second statement to build a "one field constraint" rule. 
+
+Text will be output in block content if the rule triggers. 
+
+Additional texts can be setup for : 
+
+All users: This text will always appear in the block.
+
+No matching rules: This text will only appear for user having none of the rules
+triggering. 
+
+Additionaly, some non editing course users could be allowed to change the content,
+but not the rules. They also will be limitated to edit the content they can access,
+depending on their profile values.
+
+Installation
+###################
+
+Profileselectorblock is very simple to install. Unpack the block into the 
+usual Moodle directory for blocks (/blocks), and browse to Site Administration =>
+notifications to get it logically installed.
+
+Capabilities
+#######################
+
+block/profileselectorhtml:addinstance : allow people to add some instance to course.
+block/profileselectorhtml:myaddinstance : allow people to add some instance to personal pages.
+block/profileselectorhtml:editcontent : allow people to edit content they can see, independently of any other editing permission
+
+Setup
+#######################
+

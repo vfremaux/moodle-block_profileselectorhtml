@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -45,7 +44,7 @@ class restore_profileselectorhtml_block_structure_step extends restore_structure
     public function process_block($data) {
         global $DB;
 
-		// nothing to do yet here
+        // Nothing to do yet here.
     }
     
     /*
@@ -54,9 +53,9 @@ class restore_profileselectorhtml_block_structure_step extends restore_structure
     }
     */
 
-	/*
-	*
-	*/
+    /*
+    *
+    */
     public function process_rule($data) {
         global $DB;
 

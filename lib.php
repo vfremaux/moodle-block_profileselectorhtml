@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -26,7 +25,7 @@
 
 function block_profileselectorhtml_pluginfile($course, $birecord_or_cm, $context, $filearea, $args, $forcedownload) {
     global $SCRIPT;
-    
+
     if ($context->contextlevel != CONTEXT_BLOCK) {
         send_file_not_found();
     }
@@ -38,12 +37,12 @@ function block_profileselectorhtml_pluginfile($course, $birecord_or_cm, $context
     }
 
     $fs = get_file_storage();
-    
-    if ($filearea == 'text_match'){
-	    $itemid = array_shift($args);
-	} else {
-		$itemid = 0;
-	}
+
+    if ($filearea == 'text_match') {
+        $itemid = array_shift($args);
+    } else {
+        $itemid = 0;
+    }
 
     $filename = array_pop($args);
     $filepath = $args ? '/'.implode('/', $args).'/' : '/';
@@ -52,14 +51,16 @@ function block_profileselectorhtml_pluginfile($course, $birecord_or_cm, $context
         send_file_not_found();
     }
 
-    if ($parentcontext = get_context_instance_by_id($birecord_or_cm->parentcontextid)) {
+    if ($parentcontext = context::instance_by_id($birecord_or_cm->parentcontextid)) {
         if ($parentcontext->contextlevel == CONTEXT_USER) {
-            // force download on all personal pages including /my/
-            //because we do not have reliable way to find out from where this is used
+            /*
+             * Force download on all personal pages including /my/
+             * because we do not have reliable way to find out from where this is used
+             */
             $forcedownload = true;
         }
     } else {
-        // weird, there should be parent context, better force dowload then
+        // Weird, there should be parent context, better force dowload then.
         $forcedownload = true;
     }
 
@@ -73,7 +74,7 @@ function block_profileselectorhtml_pluginfile($course, $birecord_or_cm, $context
  * @param  $replace
  * @return void
  */
-function block_profilespecifichtml_global_db_replace($search, $replace) {
+function block_profileselectorhtml_global_db_replace($search, $replace) {
     global $DB;
 
     $instances = $DB->get_recordset('block_instances', array('blockname' => 'profileselectorhtml'));
@@ -82,21 +83,21 @@ function block_profilespecifichtml_global_db_replace($search, $replace) {
         $config = unserialize(base64_decode($instance->configdata));
         $commit = false;
         if (isset($config->text_all) and is_string($config->text_all)) {
-        	$commit = true;
+            $commit = true;
             $config->text_all = str_replace($search, $replace, $config->text_all);
         }
 
         if (isset($config->text_match) and is_string($config->text_match)) {
-        	$commit = true;
+            $commit = true;
             $config->text_match = str_replace($search, $replace, $config->text_match);
         }
-        
+
         if (isset($config->text_nomatch) and is_string($config->text_nomatch)) {
-        	$commit = true;
+            $commit = true;
             $config->text_nomatch = str_replace($search, $replace, $config->text_nomatch);
         }
-                
-        if ($commit){
+
+        if ($commit) {
             $DB->set_field('block_instances', 'configdata', base64_encode(serialize($config)), array('id' => $instance->id));
         }
     }

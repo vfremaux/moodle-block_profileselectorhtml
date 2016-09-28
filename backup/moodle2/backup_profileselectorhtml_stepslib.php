@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -34,39 +33,39 @@ class backup_profileselectorhtml_block_structure_step extends backup_block_struc
     protected function define_structure() {
         global $DB;
 
-        // Get the block
+        // Get the block.
         $block = $DB->get_record('block_instances', array('id' => $this->task->get_blockid()));
 
         // Extract configdata
         $config = unserialize(base64_decode($block->configdata));
 
-        // Define each element separated
+        // Define each element separated.
 
         $rules = new backup_nested_element('profilerules');
         $rule = new backup_nested_element('profilerule', array('id'), array('name', 'field1', 'op1', 'value1', 'field2', 'operation', 'op2', 'value2', 'text_match', 'course', 'blockid'));
 
-        // Build the tree
+        // Build the tree.
 
         $rules->add_child($rule);
 
-        // Define sources
+        // Define sources.
 
-		$ruleinstances = $DB->get_records('block_profileselectorhtml_r', array('blockid' => $block->id));
+        $ruleinstances = $DB->get_records('block_profileselectorhtml_r', array('blockid' => $block->id));
         $rule->set_source_array($ruleinstances);
 
-        // ID Annotations (none)
+        // ID Annotations (none).
 
-        // Annotations (files)
+        // Annotations (files).
 
         $rules = $DB->get_records('block_profileselectorhtml_r', array('course' => $this->task->get_courseid(), 'blockid' => $this->task->get_blockid()));
 
-		for ($i = 1 ; $i <= count($rules); $i++){
-	        $rule->annotate_files('block_profileselectorhtml', 'text_match', $i); // This file area has one itemid per rule
-	    }
+        for ($i = 1 ; $i <= count($rules); $i++) {
+            $rule->annotate_files('block_profileselectorhtml', 'text_match', $i); // This file area has one itemid per rule
+        }
         $rule->annotate_files('block_profileselectorhtml', 'text_nomatch', null); // This file area hasn't itemid
         $rule->annotate_files('block_profileselectorhtml', 'text_all', null); // This file area hasn't itemid
 
-        // Return the root element (page_module), wrapped into standard block structure
+        // Return the root element (page_module), wrapped into standard block structure.
         return $this->prepare_block_structure($rules);
     }
 }
