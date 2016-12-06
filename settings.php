@@ -14,8 +14,6 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * @package   block_profileselectorhtml
  * @category  blocks
@@ -24,6 +22,9 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright 2012 Valery Fremaux
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+defined('MOODLE_INTERNAL') || die();
 
-$settings->add(new admin_setting_configcheckbox('includejquery', get_string('includejquery', 'block_profileselectorhtml'),
-               get_string('includejquerycomment', 'block_profileselectorhtml'), false));
+$key = 'includejquery';
+$label = get_string('includejquery', 'block_profileselectorhtml');
+$desc = get_string('includejquerycomment', 'block_profileselectorhtml');
+$settings->add(new admin_setting_configcheckbox($key, $label, $desc, false));
