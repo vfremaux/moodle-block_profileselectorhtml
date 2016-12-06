@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-require_once('../../../config.php');
+require('../../../config.php');
 
 $blockid = optional_param('bui_editid',null,PARAM_INT);
 $id = optional_param('id',null,PARAM_INT);
@@ -53,7 +53,7 @@ if (count($rules) > 0) {
     echo 'dhxAccord.addItem("a1", "New rule").attachObject("configheader1");';
 }
 
-//delete button.
+// Delete button.
 
 echo '$(\'.btn_del\').click(function(){
 
@@ -69,3 +69,4 @@ if(confirm(\''.get_string('confirm_delete','block_profileselectorhtml').'\')){
 });';
 
 echo '});';
+
