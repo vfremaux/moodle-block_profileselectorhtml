@@ -115,7 +115,6 @@ class block_profileselectorhtml_edit_form extends block_edit_form {
 
             $mform->addElement('header', 'configheader'.$i, get_string('rule', 'block_profileselectorhtml').$i);
             $mform->addElement('hidden', 'ruleid_'.$i);
-            $mform->setType('ruleid_'.$i, PARAM_INT);
 
             $mform->addElement('text', 'config_rulename'.$i, get_string('configrulename', 'block_profileselectorhtml'));
             $mform->setType('config_rulename'.$i, PARAM_MULTILANG);
@@ -166,9 +165,9 @@ class block_profileselectorhtml_edit_form extends block_edit_form {
 
         $rules = $DB->get_records('block_profileselectorhtml_r', array('course' => $id, 'blockid' => $blockid));
         if ($rc) {
-               $this->block->config->rulescount = $rc;
+               $this->block->config->rulescount = $rc;  
         } elseif (count($rules) > 0) {
-               $this->block->config->rulescount = count($rules);
+               $this->block->config->rulescount = count($rules);       
         } else {
              $this->block->config->rulescount = 1;
         }
@@ -230,10 +229,10 @@ class block_profileselectorhtml_edit_form extends block_edit_form {
                 } else {
                     $currenttext = $text_match;
                 }
-                $ctm = 'config_text_match_'.$i;
+                $ctm = 'config_text_match_'.$i;  
                 $defaults->{$ctm}['text'] = file_prepare_draft_area($draftid_editor, $this->block->context->id, 'block_profileselectorhtml', 'text_match', $i, array('subdirs' => true), $currenttext);
                 $defaults->{$ctm}['itemid'] = $draftid_editor;
-                $defaults->{$ctm}['format'] = @$this->block->config->format;
+                $defaults->{$ctm}['format'] = @$this->block->config->format;             
 
                 $tm = "text_match_".$i;
 
