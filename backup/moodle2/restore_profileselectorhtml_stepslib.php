@@ -15,14 +15,15 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Define all the restore steps that wll be used by the restore_profileselectorhtml_block_task
- *
  * @package moodlecore
  * @subpackage backup-moodle2
  * @copyright 2003 onwards Eloy Lafuente (stronk7) {@link http://stronk7.com}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-defined('MOODLE_INTERNAL') || die();
+
+/**
+ * Define all the restore steps that wll be used by the restore_profileselectorhtml_block_task
+ */
 
 /**
  * Define the complete profileselectorhtml structure for restore
@@ -35,7 +36,7 @@ class restore_profileselectorhtml_block_structure_step extends restore_structure
 
         $paths[] = new restore_path_element('block', '/block', true);
         // $paths[] = new restore_path_element('rules', '/block/rules');
-        $paths[] = new restore_path_element('rule', '/block/profilerules/profilerule');
+        $paths[] = new restore_path_element('rule', '/block/rules/rule');
 
         return $paths;
     }
@@ -43,17 +44,19 @@ class restore_profileselectorhtml_block_structure_step extends restore_structure
     public function process_block($data) {
         global $DB;
 
-        if (!empty($data['profilerules']['profilerule'])) {
-            foreach ($data['profilerules']['profilerule'] as $rule) {
-                $this->process_profilerule($rule);
-            }
-        }
+        // Nothing to do yet here.
     }
     
     /*
-     *
-     */
-    public function process_profilerule($data) {
+    // We cannot do anything with that. 
+    public function process_rules($data) {
+    }
+    */
+
+    /*
+    *
+    */
+    public function process_rule($data) {
         global $DB;
 
         $data  = (object) $data;
@@ -65,13 +68,10 @@ class restore_profileselectorhtml_block_structure_step extends restore_structure
         $ruleid = $DB->insert_record('block_profileselectorhtml_r', $data);
     }
 
-    /*
-     *
-     */
     protected function after_execute() {
-        // Add profileselectorhtml related files, no need to match by itemname (just internally handled context).
+        // Add profileselectorhtml related files, no need to match by itemname (just internally handled context)
         $this->add_related_files('block_profileselectorhtml', 'text_match', 'rule');
-        $this->add_related_files('block_profileselectorhtml', 'text_nomatch', null);
-        $this->add_related_files('block_profileselectorhtml', 'text_all', null);
+        $this->add_related_files('block_profileselectorhtml', 'text_nomatch', 'block');
+        $this->add_related_files('block_profileselectorhtml', 'text_all', 'block');
     }
 }
