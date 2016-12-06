@@ -14,15 +14,14 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+require_once 'backup_profileselectorhtml_stepslib.php';
+
 /**
  * @package moodlecore
  * @subpackage backup-moodle2
  * @copyright 2003 onwards Eloy Lafuente (stronk7) {@link http://stronk7.com}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-defined('MOODLE_INTERNAL') || die();
-
-require_once('backup_profileselectorhtml_stepslib.php');
 
 /**
  * Specialised backup task for the html block
@@ -36,7 +35,7 @@ class backup_profileselectorhtml_block_task extends backup_block_task {
     }
 
     protected function define_my_steps() {
-        // page_module has one structure step.
+        // page_module has one structure step
         $this->add_step(new backup_profileselectorhtml_block_structure_step('profileselectorhtml_structure', 'profileselectorhtml.xml'));
     }
 

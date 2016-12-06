@@ -25,7 +25,7 @@
 
 require('../../config.php');
 
-$deleteid = required_param('delete', PARAM_INT);
+$delete = required_param('delete', PARAM_INT);
 $blockid = optional_param('bui_editid', null, PARAM_INT);
 $cid = optional_param('id', null, PARAM_INT);
 
@@ -39,7 +39,6 @@ $blockcontext = context_block::instance($blockid);
 require_login($course);
 require_capability('block/profileselectorhtml:editcontent', $blockcontext);
 
-$DB->delete_records('block_profileselectorhtml_r', array('id' => $deleteid));
+$DB->delete_records('block_profileselectorhtml_r', array('id' => $delete));
 
 redirect(new moodle_url('/course/view.php', array('id' => $cid, 'sesskey' => sesskey(), 'bui_editid' => $blockid)));
-

@@ -59,7 +59,9 @@ class backup_profileselectorhtml_block_structure_step extends backup_block_struc
 
         $rulerecs = $DB->get_records('block_profileselectorhtml_r', array('course' => $this->task->get_courseid(), 'blockid' => $this->task->get_blockid()));
 
-        $rule->annotate_files('block_profileselectorhtml', 'text_match', 'id'); // This file area has one itemid per rule
+        for ($i = 1 ; $i <= count($rulerecs); $i++) {
+            $rule->annotate_files('block_profileselectorhtml', 'text_match', 'id'); // This file area has one itemid per rule
+        }
         $rule->annotate_files('block_profileselectorhtml', 'text_nomatch', null); // This file area hasn't itemid
         $rule->annotate_files('block_profileselectorhtml', 'text_all', null); // This file area hasn't itemid
 
