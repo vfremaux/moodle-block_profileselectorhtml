@@ -48,12 +48,12 @@ class ProfileSelectorHtmlEditForm extends moodleform {
         $rules = $DB->get_records('block_profileselectorhtml_r', array('course' => $courseid, 'blockid' => $blockid));
 
         if ($rc) {
-              $rules_count = $rc;
-        } else if(count($rules) > 0) {
-              $rules_count = count($rules);
+              $rulescount = $rc;
+        } else if (count($rules) > 0) {
+              $rulescount = count($rules);
         } else {
             // New rule.
-              $rules_count = 1;
+              $rulescount = 1;
         }
 
         $theblock = new block_profileselectorhtml();
@@ -77,7 +77,7 @@ class ProfileSelectorHtmlEditForm extends moodleform {
             $i++;
         }
 
-        $mform->addElement('hidden', 'rc', $rules_count);
+        $mform->addElement('hidden', 'rc', $rulescount);
         $mform->addElement('hidden', 'id', $blockid);
         $mform->addElement('hidden', 'course', $courseid);
         $this->add_action_buttons();
@@ -106,12 +106,12 @@ class ProfileSelectorHtmlEditForm extends moodleform {
                     continue;
                 }
 
-                $text_match = $rule->text_match;
+                $textmatch = $rule->text_match;
                 $draftideditor = file_get_submitted_draft_itemid('text_match_'.$i);
-                if (empty($text_match)) {
+                if (empty($textmatch)) {
                     $currenttext = '';
                 } else {
-                    $currenttext = $text_match;
+                    $currenttext = $textmatch;
                 }
                 $tm = "text_match_".$i;
                 $defaults->{$tm}['text'] = file_prepare_draft_area($draftideditor, $blockcontext->id, 'block_profileselectorhtml',

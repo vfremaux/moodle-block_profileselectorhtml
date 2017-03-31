@@ -169,19 +169,21 @@ class block_profileselectorhtml_edit_form extends block_edit_form {
 
         // Rules count.
 
-        $mform->addElement('hidden','config_rulescount', $rulescount);
+        $mform->addElement('hidden', 'config_rulescount', $rulescount);
         $mform->addElement('hidden', 'rc', $rulescount);
         $mform->addElement('hidden', 'blockid', $blockid);
 
-        $mform->setType('config_rulescount', PARAM_RAW); 
-        $mform->setType('rc', PARAM_RAW); 
-        $mform->setType('blockid', PARAM_RAW); 
+        $mform->setType('config_rulescount', PARAM_RAW);
+        $mform->setType('rc', PARAM_RAW);
+        $mform->setType('blockid', PARAM_RAW);
 
-        $mform->addElement('header', 'otheroptions', get_string('other_options','block_profileselectorhtml'));
-        $mform->addElement('editor', 'config_text_nomatch', get_string('configcontentwhennomatch', 'block_profileselectorhtml'), null, $editoroptions);
+        $mform->addElement('header', 'otheroptions', get_string('other_options', 'block_profileselectorhtml'));
+        $label = get_string('configcontentwhennomatch', 'block_profileselectorhtml');
+        $mform->addElement('editor', 'config_text_nomatch', $label, null, $editoroptions);
         $mform->setType('config_text_nomatch', PARAM_RAW); // XSS is prevented when printing the block contents and serving files.
 
-        $mform->addElement('editor', 'config_text_all', get_string('configcontentforall', 'block_profileselectorhtml'), null, $editoroptions);
+        $label = get_string('configcontentforall', 'block_profileselectorhtml');
+        $mform->addElement('editor', 'config_text_all', $label, null, $editoroptions);
         $mform->setType('config_text_all', PARAM_RAW); // XSS is prevented when printing the block contents and serving files.
 
     }
@@ -299,17 +301,17 @@ class block_profileselectorhtml_edit_form extends block_edit_form {
                 $defaults->{$op} = $rule->operation;
                 $this->block->config->{$op} = $rule->operation;
 
-                $field2= "field2_".$i;
+                $field2 = "field2_".$i;
                 $defaults->{$field2} = $rule->field2;
                 $this->block->config->{$field2} = $rule->field2;
- 
+
                 $op2 = "op2_".$i;
                 $defaults->{$op2} = $rule->op2;
                 $this->block->config->{$op2} = $rule->op2;
 
                 $value2 = "value2_".$i;
                 $defaults->{$value2} = $rule->value2;
-                $this->block->config->{$value2} = $rule->value2 ;
+                $this->block->config->{$value2} = $rule->value2;
 
                 $ruleid = "ruleid_".$i;
                 $defaults->{$ruleid} = $rule->id;

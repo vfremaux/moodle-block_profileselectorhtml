@@ -33,9 +33,9 @@ $block = block_instance('block_profileselectorhtml', $instance);
 
 $rules = $DB->get_records('block_profileselectorhtml_r', array('course' => $id, 'blockid' => $blockid));
 if (count($rules) > 0) {
-    $rules_count = count($rules);
+    $rulescount = count($rules);
 } else {
-    $rules_count = 1;
+    $rulescount = 1;
 }
 
 echo '$(document).ready(function(){';

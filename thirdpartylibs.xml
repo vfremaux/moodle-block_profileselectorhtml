@@ -7,4 +7,11 @@
     <version>3.0</version>
     <licenseversion></licenseversion>
   </library>
+  <library>
+    <location>js/dhtmlx</location>
+    <name>DHTMLX Widgets</name>
+    <license>MIT</license>
+    <version></version>
+    <licenseversion></licenseversion>
+  </library>
 </libraries>
