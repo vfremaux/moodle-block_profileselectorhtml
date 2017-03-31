@@ -16,22 +16,22 @@
 
 require('../../../config.php');
 
-$blockid = optional_param('bui_editid',null,PARAM_INT);
-$id = optional_param('id',null,PARAM_INT);
-$rc = optional_param('rc',null,PARAM_INT);
+$blockid = optional_param('bui_editid', null, PARAM_INT);
+$id = optional_param('id', null, PARAM_INT);
+$rc = optional_param('rc', null, PARAM_INT);
 
 header("Content-type: text/javascript; charset=utf-8");
 
-$course_context = context_course::instance($id);
+$coursecontext = context_course::instance($id);
 
 require_login();
 
-$PAGE->set_context($course_context); 
+$PAGE->set_context($coursecontext);
 
-$instance = $DB->get_record('block_instances',array('id' => $blockid)); 
+$instance = $DB->get_record('block_instances', array('id' => $blockid));
 $block = block_instance('block_profileselectorhtml', $instance);
 
-$rules = $DB->get_records('block_profileselectorhtml_r',array('course' => $id,'blockid' => $blockid));
+$rules = $DB->get_records('block_profileselectorhtml_r', array('course' => $id, 'blockid' => $blockid));
 if (count($rules) > 0) {
     $rules_count = count($rules);
 } else {
@@ -40,7 +40,7 @@ if (count($rules) > 0) {
 
 echo '$(document).ready(function(){';
 
-echo 'var dhxAccord = new dhtmlXAccordion("rules_cont",\'dhx_web\');';
+echo 'var dhxAccord = new dhtmlXAccordion("rules_cont", \'dhx_web\');';
 
 if (count($rules) > 0) {
     $i = 1;
@@ -58,14 +58,14 @@ if (count($rules) > 0) {
 echo '$(\'.btn_del\').click(function(){
 
 var delete_link = "'.$CFG->wwwroot.'/blocks/profileselectorhtml/delete.php?id='.$id.'&sesskey='.sesskey().'&bui_editid='.$blockid.'&delete=";
-if(confirm(\''.get_string('confirm_delete','block_profileselectorhtml').'\')){
+if(confirm(\''.get_string('confirm_delete', 'block_profileselectorhtml').'\')){
     var index = $(this).attr(\'rule\');
     var ruleid = $(\'input[name=ruleid_\'+index+\']\').val();
-  
+
     delete_link = delete_link + ruleid;
     window.location = delete_link;
 }
-   
+
 });';
 
 echo '});';
