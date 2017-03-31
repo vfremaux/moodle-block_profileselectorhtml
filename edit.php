@@ -12,7 +12,7 @@
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Moodle. If not, see <http://www.gnu.org/licenses/>.
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
  * @package   block_profileselectorhtml
@@ -38,7 +38,7 @@ $PAGE->requires->js('/blocks/profileselectorhtml/js/dhtmlx/dhtmlxAccordion/codeb
 $PAGE->requires->js('/blocks/profileselectorhtml/js/dhtmlx/dhtmlxAccordion/codebase/dhtmlxaccordion.js');
 $PAGE->requires->js('/blocks/profileselectorhtml/js/dhtmlx/dhtmlxAccordion/codebase/dhtmlxcontainer.js');
 
-if (!$instance = $DB->get_record('block_instances', array('id' =>  $id))) {
+if (!$instance = $DB->get_record('block_instances', array('id' => $id))) {
     print_error('errorbadblockinstance', 'block_editablecontenthtml');
 }
 
@@ -46,57 +46,59 @@ if (!$course = $DB->get_record('course', array('id' => $courseid))) {
     print_error('invalidcourseid');
 }
 
-$theBlock = block_instance('editablecontenthtml', $instance);
-
 // Security.
+
+require_login($course);
+
+$theblock = block_instance('editablecontenthtml', $instance);
 
 $blockcontext = context_block::instance($id);
 $coursecontext = context_course::instance($course->id);
-require_login($course);
 require_capability('block/profileselectorhtml:editcontent', $blockcontext);
 
 $mform = new ProfileSelectorHtmlEditForm();
 
 if ($mform->is_cancelled()) {
     if ($course->id != SITEID) {
-        redirect($CFG->wwwroot.'/course/view.php?id='.$courseid);
+        redirect(new moodle_url('/course/view.php', array('id' => $courseid)));
     } else {
         redirect($CFG->wwwroot.'/index.php');
     }
 }
 
 if ($data = $mform->get_data()) {
-    $theBlock = new block_profileselectorhtml();
+    $theblock = new block_profileselectorhtml();
     $i = 1;
     $rules = $DB->get_records('block_profileselectorhtml_r', array('course' => $courseid, 'blockid' => $blockid));
 
     foreach ($rules as $rule) {
 
-        $res = $theBlock->check_rule_match($rule);
+        $res = $theblock->check_rule_match($rule);
         if (!$res) {
             continue;
         }
 
         $tm = 'text_match_'.$i;
         $draftid_editor = file_get_submitted_draft_itemid($tm);
-        $rule->text_match  = file_save_draft_area_files($draftid_editor, $blockcontext->id, 'block_profileselectorhtml', 'text_match', $i, null, $data->{$tm}['text']);
+        $rule->text_match  = file_save_draft_area_files($draftid_editor, $blockcontext->id, 'block_profileselectorhtml',
+                                                        'text_match', $i, null, $data->{$tm}['text']);
         $DB->update_record('block_profileselectorhtml_r', $rule);
 
-        // $config = file_postupdate_standard_editor($data, 'text_match', $mform->editoroptions, $blockcontext, 'block_profileselectorhtml', 'text_match', $i);
         $i++;
     }
 
     if ($courseid != SITEID) {
-        redirect($CFG->wwwroot.'/course/view.php?id='.$course->id);
+        redirect(new moodle_url('/course/view.php', array('id' => $course->id)));
     } else {
         redirect($CFG->wwwroot.'/index.php');
     }
 }
 
-$PAGE->navbar->add(get_string('pluginname', 'block_profileselectorhtml'), null);    
-$PAGE->navbar->add(get_string('editcontent', 'block_profileselectorhtml'), null);    
+$PAGE->navbar->add(get_string('pluginname', 'block_profileselectorhtml'), null);
+$PAGE->navbar->add(get_string('editcontent', 'block_profileselectorhtml'), null);
 
-$url = new moodle_url('/blocks/profileselectorhtml/edit.php?sesskey='.sesskey().'&bui_editid='.$blockid.'&course='.$courseid.'&id='.$id);
+$params = array('sesskey' => sesskey(), 'bui_editid' => $blockid, 'course' => $courseid, 'id' => $id);
+$url = new moodle_url('/blocks/profileselectorhtml/edit.php', $params);
 $PAGE->set_url($url);
 $PAGE->set_title($SITE->fullname);
 $PAGE->set_heading($SITE->shortname);
@@ -105,7 +107,7 @@ $system_context = context_system::instance();
 $PAGE->set_context($system_context);
 
 echo $OUTPUT->header();
-echo ($OUTPUT->heading(get_string('editcontent', 'block_editablecontenthtml')));
+echo $OUTPUT->heading(get_string('editcontent', 'block_profileselectorhtml'));
 
 $data = new stdClass();
 $data->id = $id;
@@ -113,13 +115,12 @@ $data->course = $courseid;
 
 // Load the rule.
 
-if (!empty($theBlock->config->lockcontent) && !has_capability('moodle/course:manageactivities', $coursecontext)) {
+if (!empty($theblock->config->lockcontent) && !has_capability('moodle/course:manageactivities', $coursecontext)) {
     echo $OUTPUT->box(get_string('contentislocked', 'block_editablecontenthtml'));
     echo '<br/>';
-    echo $OUTPUT->continue_button($CFG->wwwroot.'/course/view.php?id='.$courseid);
+    echo $OUTPUT->continue_button(new moodle_url('/course/view.php', array('id' => $courseid)));
 } else {
     $mform->set_data($data);
     $mform->display();
 }
-
 echo $OUTPUT->footer($course);
