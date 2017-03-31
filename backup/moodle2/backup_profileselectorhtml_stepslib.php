@@ -15,15 +15,14 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
+ * Define all the backup steps that wll be used by the backup_page_module_block_task
+ *
  * @package moodlecore
  * @subpackage backup-moodle2
  * @copyright 2003 onwards Eloy Lafuente (stronk7) {@link http://stronk7.com}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-/**
- * Define all the backup steps that wll be used by the backup_page_module_block_task
- */
+defined('MOODLE_INTERNAL') || die();
 
 /**
  * Define the complete forum structure for backup, with file and id annotations
@@ -42,7 +41,8 @@ class backup_profileselectorhtml_block_structure_step extends backup_block_struc
         // Define each element separated.
 
         $rules = new backup_nested_element('profilerules');
-        $rule = new backup_nested_element('profilerule', array('id'), array('name', 'field1', 'op1', 'value1', 'field2', 'operation', 'op2', 'value2', 'text_match', 'course', 'blockid'));
+        $rule = new backup_nested_element('profilerule', array('id'), array('name', 'field1', 'op1', 'value1', 'field2', 'operation',
+                                                                            'op2', 'value2', 'text_match', 'course', 'blockid'));
 
         // Build the tree.
 
@@ -57,13 +57,12 @@ class backup_profileselectorhtml_block_structure_step extends backup_block_struc
 
         // Annotations (files).
 
-        $rules = $DB->get_records('block_profileselectorhtml_r', array('course' => $this->task->get_courseid(), 'blockid' => $this->task->get_blockid()));
+        $params = array('course' => $this->task->get_courseid(), 'blockid' => $this->task->get_blockid());
+        $rulerecs = $DB->get_records('block_profileselectorhtml_r', $params);
 
-        for ($i = 1 ; $i <= count($rules); $i++) {
-            $rule->annotate_files('block_profileselectorhtml', 'text_match', $i); // This file area has one itemid per rule
-        }
-        $rule->annotate_files('block_profileselectorhtml', 'text_nomatch', null); // This file area hasn't itemid
-        $rule->annotate_files('block_profileselectorhtml', 'text_all', null); // This file area hasn't itemid
+        $rule->annotate_files('block_profileselectorhtml', 'text_match', 'id'); // This file area has one itemid per rule.
+        $rule->annotate_files('block_profileselectorhtml', 'text_nomatch', null); // This file area hasn't itemid.
+        $rule->annotate_files('block_profileselectorhtml', 'text_all', null); // This file area hasn't itemid.
 
         // Return the root element (page_module), wrapped into standard block structure.
         return $this->prepare_block_structure($rules);
