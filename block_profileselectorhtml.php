@@ -24,6 +24,8 @@
  */
 defined('MOODLE_INTERNAL') || die();
 
+require_once($CFG->dirroot.'/blocks/profileselectorhtml/extralib/lib.php');
+
 class block_profileselectorhtml extends block_base {
 
     public function init() {
@@ -234,13 +236,20 @@ class block_profileselectorhtml extends block_base {
         }
 
         if ($rule->op1 == '~=') {
-            $expr = "\$res1 = preg_match('/{$rule->value1}/', '{$uservalue}') ;";
+            $inputs = array();
+            $inputs['pattern'] = $rule->value1;
+            $inputs['value'] = $uservalue;
+            $expr = 'preg_match(\'/\$pattern/\', \'\$value\')';
         } else {
-            $expr = "\$res1 = '{$uservalue}' {$rule->op1} '{$rule->value1}' ;";
+            $inputs = array();
+            $inputs['value'] = $uservalue;
+            $inputs['op'] = $rule->op1;
+            $inputs['refvalue'] = $rule->value1;
+            $expr = "'\$value' \$op '\$refvalue'";
         }
 
         $res = null;
-        @eval($expr);
+        block_profileselectorhtml_eval($expr, $inputs, $res1);
 
         if (@$rule->operation) {
 
@@ -255,11 +264,18 @@ class block_profileselectorhtml extends block_base {
             }
 
             if ($rule->op2 == '~=') {
-                $expr = "\$res2 =(int) preg_match('/{$rule->value2}/', '{$uservalue}'}) ;";
+                $inputs = array();
+                $inputs['value'] = $uservalue;
+                $inputs['pattern'] = $rule->value2;
+                $expr = '(int) preg_match(\'/\$pattern/\', \'\$uservalue\')';
             } else {
-                $expr = "\$res2 ='{$uservalue}' {$rule->op1} '{$rule->value2}' ;";
+                $inputs = array();
+                $inputs['value'] = $uservalue;
+                $inputs['op'] = $rule->op2;
+                $inputs['reference'] = $rule->value2;
+                $expr = "'{\$uservalue}' {\$op} '{\$reference}'";
             }
-            @eval($expr);
+            block_profileselectorhtml_eval($expr, $inputs, $res2);
 
             if (!@$res2) {
                 $res2 = 0;
@@ -269,8 +285,12 @@ class block_profileselectorhtml extends block_base {
                 $res1 = 0;
             }
 
-            $finalexpr = "\$res =(bool) ($res1 {$rule->operation} $res2) ;";
-            @eval($finalexpr);
+            $finalexpr = "(bool) (\$res1 {\$op} \$res2)";
+            $inputs = array();
+            $inputs['res1'] = $res1;
+            $inputs['res2'] = $res2;
+            $inputs['op'] = $rule->op;
+            block_profileselectorhtml_eval($finalexpr, $inputs, $res);
         } else {
             $res = @$res1;
         }
