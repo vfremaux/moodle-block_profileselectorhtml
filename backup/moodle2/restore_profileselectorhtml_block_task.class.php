@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -21,6 +20,9 @@
  * @copyright 2003 onwards Eloy Lafuente (stronk7) {@link http://stronk7.com}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+defined('MOODLE_INTERNAL') || die();
+
+require_once($CFG->dirroot.'/blocks/profileselectorhtml/backup/moodle2/restore_profileselectorhtml_stepslib.php');
 
 require_once 'restore_profileselectorhtml_stepslib.php';
 
@@ -36,7 +38,12 @@ class restore_profileselectorhtml_block_task extends restore_block_task {
     }
 
     protected function define_my_steps() {
+<<<<<<< HEAD
         $this->add_step(new restore_profileselectorhtml_block_structure_step('profileselectorhtml_structure', 'profileselectorhtml.xml'));
+=======
+        $step = new restore_profileselectorhtml_block_structure_step('profileselectorhtml_structure', 'profileselectorhtml.xml');
+        $this->add_step($step);
+>>>>>>> MOODLE_32_STABLE
     }
 
     public function get_fileareas() {
@@ -44,15 +51,22 @@ class restore_profileselectorhtml_block_task extends restore_block_task {
     }
 
     public function get_configdata_encoded_attributes() {
+<<<<<<< HEAD
         return array('text_nomatch', 'text_all'); // We need to encode some attrs in configdata
+=======
+        return array('text_nomatch', 'text_all'); // We need to encode some attrs in configdata.
+>>>>>>> MOODLE_32_STABLE
     }
 
     static public function define_decode_contents() {
-
         $contents = array();
+<<<<<<< HEAD
 
         $contents[] = new restore_profileselectorhtml_block_decode_content('block_instances', 'configdata');
 
+=======
+        $contents[] = new restore_profileselectorhtml_block_decode_content('block_instances', 'configdata');
+>>>>>>> MOODLE_32_STABLE
         return $contents;
     }
 
@@ -68,7 +82,8 @@ class restore_profileselectorhtml_block_task extends restore_block_task {
  */
 class restore_profileselectorhtml_block_decode_content extends restore_decode_content {
 
-    protected $configdata; // Temp storage for unserialized configdata
+    // Temp storage for unserialized configdata.
+    protected $configdata;
 
     protected function get_iterator() {
         global $DB;

@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -23,6 +22,9 @@ require_once 'backup_profileselectorhtml_stepslib.php';
  * @copyright 2003 onwards Eloy Lafuente (stronk7) {@link http://stronk7.com}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+defined('MOODLE_INTERNAL') || die();
+
+require_once('backup_profileselectorhtml_stepslib.php');
 
 /**
  * Specialised backup task for the html block
@@ -36,8 +38,14 @@ class backup_profileselectorhtml_block_task extends backup_block_task {
     }
 
     protected function define_my_steps() {
+<<<<<<< HEAD
         // page_module has one structure step
         $this->add_step(new backup_profileselectorhtml_block_structure_step('profileselectorhtml_structure', 'profileselectorhtml.xml'));
+=======
+        // Block has one structure step.
+        $step = new backup_profileselectorhtml_block_structure_step('profileselectorhtml_structure', 'profileselectorhtml.xml');
+        $this->add_step($step);
+>>>>>>> MOODLE_32_STABLE
     }
 
     public function get_fileareas() {
@@ -45,11 +53,14 @@ class backup_profileselectorhtml_block_task extends backup_block_task {
     }
 
     public function get_configdata_encoded_attributes() {
+<<<<<<< HEAD
         return array('config_text_nomatch', 'config_text_all'); // We need to encode some attrs in configdata
+=======
+        return array('config_text_nomatch', 'config_text_all'); // We need to encode some attrs in configdata.
+>>>>>>> MOODLE_32_STABLE
     }
 
     static public function encode_content_links($content) {
-        return $content; // No special encoding of links
+        return $content; // No special encoding of links.
     }
 }
-
