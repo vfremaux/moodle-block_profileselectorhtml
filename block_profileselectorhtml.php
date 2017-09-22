@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-<?php //$Id: block_profileselectorhtml.php,v 1.2 2012-04-28 10:24:54 vf Exp $
-=======
 <?php
 // This file is part of Moodle - http://moodle.org/
 //
@@ -26,7 +23,8 @@
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 defined('MOODLE_INTERNAL') || die();
->>>>>>> MOODLE_32_STABLE
+
+require_once($CFG->dirroot.'/blocks/profileselectorhtml/extralib/lib.php');
 
 class block_profileselectorhtml extends block_base {
 
@@ -40,7 +38,7 @@ class block_profileselectorhtml extends block_base {
 
     public function specialization() {
         if (isset($this->config->title)) {
-            $this->title = format_string($this->config->title) ;
+            $this->title = format_string($this->config->title);
         } else {
             $this->title = format_string(get_string('newhtmlblock', 'block_profileselectorhtml'));
         }
@@ -57,11 +55,7 @@ class block_profileselectorhtml extends block_base {
             return false;
         }
 
-<<<<<<< HEAD
-        //find out if this block is on the profile page
-=======
         // Find out if this block is on the profile page.
->>>>>>> MOODLE_32_STABLE
         if ($context->contextlevel == CONTEXT_USER) {
             if ($SCRIPT === '/my/index.php') {
                 /*
@@ -77,17 +71,10 @@ class block_profileselectorhtml extends block_base {
         return true;
     }
 
-<<<<<<< HEAD
-    function get_content() {
-    	global $USER, $DB, $COURSE, $CFG;
-    	
-        if ($this->content !== NULL) {
-=======
     public function get_content() {
         global $USER, $DB, $COURSE, $CFG;
 
         if ($this->content !== null) {
->>>>>>> MOODLE_32_STABLE
             return $this->content;
         }
 
@@ -101,47 +88,13 @@ class block_profileselectorhtml extends block_base {
             // Fancy html allowed only on course, category and system blocks.
             $filteropt->noclean = true;
         }
-<<<<<<< HEAD
-        
-=======
 
->>>>>>> MOODLE_32_STABLE
         $blockcontext = context_block::instance($this->instance->id);
         $coursecontext = context_course::instance($COURSE->id);
         $streditcontent = get_string('editcontent', 'block_profileselectorhtml');
 
         $this->content = new stdClass;
 
-<<<<<<< HEAD
-        $this->config->text_all = file_rewrite_pluginfile_urls(@$this->config->text_all, 'pluginfile.php', $this->context->id, 'block_profileselectorhtml', 'text_all', NULL);
-        $this->config->text_nomatch = file_rewrite_pluginfile_urls(@$this->config->text_nomatch, 'pluginfile.php', $this->context->id, 'block_profileselectorhtml', 'text_nomatch', NULL);
-        $this->content->text = !empty($this->config->text_all) ? format_text($this->config->text_all, FORMAT_HTML, $filteropt) : '';
-      
-        //now we add the matching rules text. 
-        $rules = $DB->get_records('block_profileselectorhtml_r', array('course' => $COURSE->id, 'blockid' => $this->instance->id));
-        
-        if($rules){
-            $res = false;
-            $match_count = 0;
-            foreach($rules as $rule){
-                $res = self::check_rule_match($rule);
-                
-                if (@$res){
-                    $match_count ++;
-                    $rule->text_match = file_rewrite_pluginfile_urls($rule->text_match, 'pluginfile.php', $this->context->id, 'block_profileselectorhtml', 'text_match', $match_count);
-	                $this->content->text .= format_text(@$rule->text_match, FORMAT_HTML, $filteropt);
-                }                    
-            }
-			
-            if (((has_capability('moodle/course:manageactivities', $coursecontext)) || (has_capability('block/profileselectorhtml:editcontent', $blockcontext) && !@$this->config->lockcontent)) && $match_count > 0){
-               $this->content->footer = " <a href=\"{$CFG->wwwroot}/blocks/profileselectorhtml/edit.php?sesskey=".sesskey()."&id={$this->instance->id}&amp;course={$COURSE->id}\">$streditcontent</a>";
-            }
-            
-           	if(!$res) {
-                $this->config->text_nomatch = file_rewrite_pluginfile_urls($this->config->text_nomatch, 'pluginfile.php', $this->context->id, 'block_profileselectorhtml', 'text_nomatch', NULL);
-    	        $this->content->text .= format_text(@$this->config->text_nomatch, FORMAT_HTML, $filteropt);
-            }
-=======
         if (!isset($this->config)) {
             $this->config = new StdClass;
         }
@@ -158,24 +111,24 @@ class block_profileselectorhtml extends block_base {
 
         if ($rules) {
             $res = false;
-            $match_count = 0;
+            $matchcount = 0;
             foreach ($rules as $rule) {
                 $res = self::check_rule_match($rule);
 
                 if (@$res) {
-                    $match_count ++;
+                    $matchcount ++;
                     $rule->text_match = file_rewrite_pluginfile_urls($rule->text_match, 'pluginfile.php', $this->context->id,
-                                                                     'block_profileselectorhtml', 'text_match', $match_count);
+                                                                     'block_profileselectorhtml', 'text_match', $matchcount);
                     $this->content->text .= format_text(@$rule->text_match, FORMAT_HTML, $filteropt);
                 }
             }
 
             if (((has_capability('moodle/course:manageactivities', $coursecontext)) ||
                     (has_capability('block/profileselectorhtml:editcontent', $blockcontext) &&
-                            !@$this->config->lockcontent)) && $match_count > 0) {
-               $params = array('sesskey' => sesskey(), 'id' => $this->instance->id, 'course' => $COURSE->id);
-               $editcontenturl = new moodle_url('/blocks/profileselectorhtml/edit.php', $params);
-               $this->content->footer = ' <a href="'.$editcontenturl.'">'.$streditcontent.'</a>';
+                            !@$this->config->lockcontent)) && $matchcount > 0) {
+                $params = array('sesskey' => sesskey(), 'id' => $this->instance->id, 'course' => $COURSE->id);
+                $editcontenturl = new moodle_url('/blocks/profileselectorhtml/edit.php', $params);
+                $this->content->footer = ' <a href="'.$editcontenturl.'">'.$streditcontent.'</a>';
             }
             if (!$res) {
                 $this->config->text_nomatch = file_rewrite_pluginfile_urls($this->config->text_nomatch, 'pluginfile.php',
@@ -183,7 +136,6 @@ class block_profileselectorhtml extends block_base {
                                                                            'text_nomatch', null);
                 $this->content->text .= format_text(@$this->config->text_nomatch, FORMAT_HTML, $filteropt);
             }
->>>>>>> MOODLE_32_STABLE
         }
 
         unset($filteropt); // Memory footprint.
@@ -198,59 +150,6 @@ class block_profileselectorhtml extends block_base {
 
         $config = clone($data);
 
-<<<<<<< HEAD
-        //delete all 
-        $DB->delete_records('block_profileselectorhtml_r', array('course' => $COURSE->id, 'blockid' => $this->instance->id));
-
-        //store the rules 
-
-        for($i = 1 ; $i <= optional_param('rc', 1, PARAM_INT) ; $i++){
-           	$rule = new stdClass();
-           
-           	$rulename = 'rulename'.$i;
-           	$rule->name = $data->{$rulename};
-           
-           	$field1 = 'field1_'.$i;
-           	$rule->field1 = $data->{$field1};
-          
-           	$op1 = 'op1_'.$i;
-           	$rule->op1 = $data->{$op1};
-          
-           	$value1 =  'value1_'.$i;
-           	$rule->value1 = $data->{$value1};
-       
-           	$op = 'op'.$i;
-           	$rule->operation = $data->{$op};
-          
-           	$field2 = 'field2_'.$i;
-           	$rule->field2 = $data->{$field2};
-          
-           	$op2 = 'op2_'.$i;
-           	$rule->op2 = $data->{$op2};
-           
-           	$value2 = 'value2_'.$i;
-           	$rule->value2 = $data->{$value2};
-          
-           	$text_match = 'text_match_'.$i;
-           	// $rule->text_match = $data->{$text_match}['text'];
-			$rule->text_match = file_save_draft_area_files($data->{$text_match}['itemid'], $this->context->id, 'block_profileselectorhtml', 'text_match', $i, array('subdirs' => true), $data->{$text_match}['text']);
-           
-           	// $rule->course = $_REQUEST['courseid'];
-           	$rule->course = $COURSE->id;
-           	$rule->blockid = $this->instance->id;
-                     
-           	$DB->insert_record('block_profileselectorhtml_r', $rule);
-        }
-                 
-        $config->text_all = file_save_draft_area_files($data->text_all['itemid'], $this->context->id, 'block_profileselectorhtml', 'text_all', 0, array('subdirs' => true), $data->text_all['text']);
-        $config->format_text_all = (!isset($data->text_all['format'])) ? FORMAT_MOODLE : $data->text_all['format'];
-
-      	// $config->text_match = file_save_draft_area_files($data->text_match['itemid'], $this->context->id, 'block_profileselectorhtml', 'match', 0, array('subdirs'=>true), $data->text_match['text']);
-      	// $config->format_match = (!isset($data->text_matched['format'])) ? FORMAT_MOODLE : $data->text_matched['format'];
-
-        $config->text_nomatch = file_save_draft_area_files($data->text_nomatch['itemid'], $this->context->id, 'block_profileselectorhtml', 'text_nomatch', 0, array('subdirs' => true), $data->text_nomatch['text']);
-        $config->format_text_nomatch = (!isset($data->text_nomatch['format'])) ? FORMAT_MOODLE : $data->text_nomatch['format'] ;
-=======
         // Delete all.
         $DB->delete_records('block_profileselectorhtml_r', array('course' => $COURSE->id, 'blockid' => $this->instance->id));
 
@@ -273,7 +172,7 @@ class block_profileselectorhtml extends block_base {
             $op1 = 'op1_'.$i;
             $rule->op1 = $data->{$op1};
 
-            $value1 =  'value1_'.$i;
+            $value1 = 'value1_'.$i;
             $rule->value1 = $data->{$value1};
 
             $op = 'op'.$i;
@@ -288,10 +187,10 @@ class block_profileselectorhtml extends block_base {
             $value2 = 'value2_'.$i;
             $rule->value2 = $data->{$value2};
 
-            $text_match = 'text_match_'.$i;
-            $rule->text_match = file_save_draft_area_files($data->{$text_match}['itemid'], $this->context->id,
+            $textmatch = 'text_match_'.$i;
+            $rule->text_match = file_save_draft_area_files($data->{$textmatch}['itemid'], $this->context->id,
                                                            'block_profileselectorhtml', 'text_match', $i, array('subdirs' => true),
-                                                           $data->{$text_match}['text']);
+                                                           $data->{$textmatch}['text']);
 
             $rule->course = $COURSE->id;
             $rule->blockid = $this->instance->id;
@@ -308,7 +207,6 @@ class block_profileselectorhtml extends block_base {
                                                            'block_profileselectorhtml', 'text_nomatch', 0,
                                                            array('subdirs' => true), $data->text_nomatch['text']);
         $config->format_text_nomatch = (!isset($data->text_nomatch['format'])) ? FORMAT_MOODLE : $data->text_nomatch['format'];
->>>>>>> MOODLE_32_STABLE
 
         parent::instance_config_save($config, $nolongerused);
     }
@@ -320,35 +218,6 @@ class block_profileselectorhtml extends block_base {
         return empty($this->config->title);
     }
 
-<<<<<<< HEAD
-	static function check_jquery(){
-		global $CFG, $PAGE, $OUTPUT;
-	
-		if ($CFG->version >= 2013051400) return; // Moodle 2.5 natively loads JQuery
-
-		$current = '1.10.2';
-		
-		if (empty($OUTPUT->jqueryversion)){
-			$OUTPUT->jqueryversion = '1.10.2';
-			$PAGE->requires->js('/blocks/profileselectorhtml/js/jquery-'.$current.'.min.js', true);
-		} else {
-			if ($OUTPUT->jqueryversion < $current){
-				debugging('the previously loaded version of jquery is lower than required. This may cause issues to dashboard. Programmers might consider upgrading JQuery version in the component that preloads JQuery library.', DEBUG_DEVELOPER, array('notrace'));
-			}
-		}		
-	}
-    
-    public function check_rule_match($rule){     
-    	global $USER, $DB;
-
-        if (empty($rule->field1) && empty($rule->field2)){
-            $this->content->footer = '';
-            return;
-        }       
-                
-        if (!empty($rule->field1)){
-            if (is_numeric($rule->field1) && $rule->field1 > 0){
-=======
 
     public function check_rule_match($rule) {
         global $USER, $DB;
@@ -359,8 +228,7 @@ class block_profileselectorhtml extends block_base {
         }
         if (!empty($rule->field1)) {
             if (is_numeric($rule->field1) && $rule->field1 > 0) {
->>>>>>> MOODLE_32_STABLE
-                $uservalue = $DB->get_field('user_info_data', 'data', array('fieldid' => $rule->field1, 'userid' => $USER->id)); 
+                $uservalue = $DB->get_field('user_info_data', 'data', array('fieldid' => $rule->field1, 'userid' => $USER->id));
             } else {
                 $stduserfield = $rule->field1;
                 $uservalue = $USER->$stduserfield;
@@ -368,27 +236,20 @@ class block_profileselectorhtml extends block_base {
         }
 
         if ($rule->op1 == '~=') {
-            $expr = "\$res1 = preg_match('/{$rule->value1}/', '{$uservalue}') ;";
-<<<<<<< HEAD
-        } else {        
-            $expr = "\$res1 = '{$uservalue}' {$rule->op1} '{$rule->value1}' ;";
-        }
-             
-        $res = null;  
-        @eval($expr);
-     
-        if (@$rule->operation){
-
-            if (!empty($rule->field2)){
-                if (is_numeric($rule->field2) && $rule->field2 > 0){
-                    $uservalue = $DB->get_field('user_info_data', 'data', array('fieldid' => $rule->field2, 'userid' => $USER->id)); 
-=======
+            $inputs = array();
+            $inputs['pattern'] = $rule->value1;
+            $inputs['value'] = $uservalue;
+            $expr = 'preg_match(\'/\$pattern/\', \'\$value\')';
         } else {
-            $expr = "\$res1 = '{$uservalue}' {$rule->op1} '{$rule->value1}' ;";
+            $inputs = array();
+            $inputs['value'] = $uservalue;
+            $inputs['op'] = $rule->op1;
+            $inputs['refvalue'] = $rule->value1;
+            $expr = "'\$value' \$op '\$refvalue'";
         }
 
         $res = null;
-        @eval($expr);
+        block_profileselectorhtml_eval($expr, $inputs, $res1);
 
         if (@$rule->operation) {
 
@@ -396,38 +257,25 @@ class block_profileselectorhtml extends block_base {
                 if (is_numeric($rule->field2) && $rule->field2 > 0) {
                     $params = array('fieldid' => $rule->field2, 'userid' => $USER->id);
                     $uservalue = $DB->get_field('user_info_data', 'data', $params);
->>>>>>> MOODLE_32_STABLE
                 } else {
                     $stduserfield = $rule->field2;
                     $uservalue = $USER->$stduserfield;
                 }
             }
-<<<<<<< HEAD
-                        
-            if ($rule->op2 == '~='){
-                $expr = "\$res2 =(int) preg_match('/{$rule->value2}/', '{$uservalue}'}) ;";
-            } else {        
-                $expr = "\$res2 ='{$uservalue}' {$rule->op1} '{$rule->value2}' ;";
-            }
-            @eval($expr);
-           
-            if (!$res2){
-                $res2 = 0;
-            }
-            
-            if (!$res1){
-                $res1 = 0;
-            }
-            
-            $finalexpr = "\$res =(bool) ($res1 {$rule->operation} $res2) ;"; 
-=======
 
             if ($rule->op2 == '~=') {
-                $expr = "\$res2 =(int) preg_match('/{$rule->value2}/', '{$uservalue}'}) ;";
+                $inputs = array();
+                $inputs['value'] = $uservalue;
+                $inputs['pattern'] = $rule->value2;
+                $expr = '(int) preg_match(\'/\$pattern/\', \'\$uservalue\')';
             } else {
-                $expr = "\$res2 ='{$uservalue}' {$rule->op1} '{$rule->value2}' ;";
+                $inputs = array();
+                $inputs['value'] = $uservalue;
+                $inputs['op'] = $rule->op2;
+                $inputs['reference'] = $rule->value2;
+                $expr = "'{\$uservalue}' {\$op} '{\$reference}'";
             }
-            @eval($expr);
+            block_profileselectorhtml_eval($expr, $inputs, $res2);
 
             if (!@$res2) {
                 $res2 = 0;
@@ -437,22 +285,16 @@ class block_profileselectorhtml extends block_base {
                 $res1 = 0;
             }
 
-            $finalexpr = "\$res =(bool) ($res1 {$rule->operation} $res2) ;";
->>>>>>> MOODLE_32_STABLE
-            @eval($finalexpr);
+            $finalexpr = "(bool) (\$res1 {\$op} \$res2)";
+            $inputs = array();
+            $inputs['res1'] = $res1;
+            $inputs['res2'] = $res2;
+            $inputs['op'] = $rule->op;
+            block_profileselectorhtml_eval($finalexpr, $inputs, $res);
         } else {
             $res = @$res1;
         }
-<<<<<<< HEAD
-                
-        return $res;
-    }    
-}
-
-?>
-=======
 
         return $res;
     }
 }
->>>>>>> MOODLE_32_STABLE

@@ -24,8 +24,6 @@ defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot.'/blocks/profileselectorhtml/backup/moodle2/restore_profileselectorhtml_stepslib.php');
 
-require_once 'restore_profileselectorhtml_stepslib.php';
-
 /**
  * Specialised restore task for the html block
  * (requires encode_content_links in some configdata attrs)
@@ -38,12 +36,8 @@ class restore_profileselectorhtml_block_task extends restore_block_task {
     }
 
     protected function define_my_steps() {
-<<<<<<< HEAD
-        $this->add_step(new restore_profileselectorhtml_block_structure_step('profileselectorhtml_structure', 'profileselectorhtml.xml'));
-=======
         $step = new restore_profileselectorhtml_block_structure_step('profileselectorhtml_structure', 'profileselectorhtml.xml');
         $this->add_step($step);
->>>>>>> MOODLE_32_STABLE
     }
 
     public function get_fileareas() {
@@ -51,22 +45,12 @@ class restore_profileselectorhtml_block_task extends restore_block_task {
     }
 
     public function get_configdata_encoded_attributes() {
-<<<<<<< HEAD
-        return array('text_nomatch', 'text_all'); // We need to encode some attrs in configdata
-=======
         return array('text_nomatch', 'text_all'); // We need to encode some attrs in configdata.
->>>>>>> MOODLE_32_STABLE
     }
 
     static public function define_decode_contents() {
         $contents = array();
-<<<<<<< HEAD
-
         $contents[] = new restore_profileselectorhtml_block_decode_content('block_instances', 'configdata');
-
-=======
-        $contents[] = new restore_profileselectorhtml_block_decode_content('block_instances', 'configdata');
->>>>>>> MOODLE_32_STABLE
         return $contents;
     }
 
