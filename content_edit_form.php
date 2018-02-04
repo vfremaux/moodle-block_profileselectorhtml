@@ -44,29 +44,29 @@ class ProfileSelectorHtmlEditForm extends moodleform {
         $courseid = $COURSE->id;
         $blockid = optional_param('id', null, PARAM_INT);
 
-        $block_context = context_block::instance($blockid);
+        $blockcontext = context_block::instance($blockid);
         $rules = $DB->get_records('block_profileselectorhtml_r', array('course' => $courseid, 'blockid' => $blockid));
 
         if ($rc) {
-              $rules_count = $rc;
-        } else if(count($rules) > 0) {
-              $rules_count = count($rules);
+              $rulescount = $rc;
+        } else if (count($rules) > 0) {
+              $rulescount = count($rules);
         } else {
             // New rule.
-              $rules_count = 1;
+              $rulescount = 1;
         }
 
-        $theBlock = new block_profileselectorhtml();
+        $theblock = new block_profileselectorhtml();
         $PAGE->requires->js('/blocks/profileselectorhtml/js/init.php?rc='.$rc.'&id='.$courseid.'&bui_editid='.$blockid);
 
         $i = 1;
 
         foreach ($rules as $rule) {
 
-           $res =  $theBlock->check_rule_match($rule);
-           if (!$res) {
-               continue;
-           }
+            $res = $theblock->check_rule_match($rule);
+            if (!$res) {
+                continue;
+            }
 
             $mform->addElement('hidden', 'ruleid_'.$i);
             $editoroptions = array('maxfiles' => EDITOR_UNLIMITED_FILES, 'noclean' => true);
@@ -77,7 +77,7 @@ class ProfileSelectorHtmlEditForm extends moodleform {
             $i++;
         }
 
-        $mform->addElement('hidden', 'rc', $rules_count);
+        $mform->addElement('hidden', 'rc', $rulescount);
         $mform->addElement('hidden', 'id', $blockid);
         $mform->addElement('hidden', 'course', $courseid);
         $this->add_action_buttons();
@@ -91,8 +91,8 @@ class ProfileSelectorHtmlEditForm extends moodleform {
         $blockid = optional_param('id', null, PARAM_INT);
 
         $rules = $DB->get_records('block_profileselectorhtml_r', array('course' => $courseid, 'blockid' => $blockid));
-        $block_context = context_block::instance($blockid);
-        $theBlock = new block_profileselectorhtml();
+        $blockcontext = context_block::instance($blockid);
+        $theblock = new block_profileselectorhtml();
 
         // Draft file handling for matching (all rules).
         $rules = $DB->get_records('block_profileselectorhtml_r', array('course' => $courseid, 'blockid' => $blockid));
@@ -101,26 +101,26 @@ class ProfileSelectorHtmlEditForm extends moodleform {
             $i = 1;
             foreach ($rules as $rule) {
 
-                $res =  $theBlock->check_rule_match($rule);
+                $res = $theblock->check_rule_match($rule);
                 if (!$res) {
                     continue;
                 }
 
-                $text_match = $rule->text_match;
-                $draftid_editor = file_get_submitted_draft_itemid('text_match_'.$i);
-                if (empty($text_match)) {
+                $textmatch = $rule->text_match;
+                $draftideditor = file_get_submitted_draft_itemid('text_match_'.$i);
+                if (empty($textmatch)) {
                     $currenttext = '';
                 } else {
-                    $currenttext = $text_match;
+                    $currenttext = $textmatch;
                 }
                 $tm = "text_match_".$i;
-                $defaults->{$tm}['text'] = file_prepare_draft_area($draftid_editor, $block_context->id, 'block_profileselectorhtml',
+                $defaults->{$tm}['text'] = file_prepare_draft_area($draftideditor, $blockcontext->id, 'block_profileselectorhtml',
                                                                    'text_match', $i, array('subdirs' => true), $currenttext);
-                $defaults->{$tm}['itemid'] = $draftid_editor;
+                $defaults->{$tm}['itemid'] = $draftideditor;
                 $defaults->{$tm}['format'] = FORMAT_HTML;
                 $i++;
             }
-         }
+        }
 
         /*
          * have to delete text here, otherwise parent::set_data will empty content

@@ -24,6 +24,8 @@
  */
 defined('MOODLE_INTERNAL') || die();
 
+require_once($CFG->dirroot.'/blocks/profileselectorhtml/extralib/lib.php');
+
 class block_profileselectorhtml extends block_base {
 
     public function init() {
@@ -36,7 +38,7 @@ class block_profileselectorhtml extends block_base {
 
     public function specialization() {
         if (isset($this->config->title)) {
-            $this->title = format_string($this->config->title) ;
+            $this->title = format_string($this->config->title);
         } else {
             $this->title = format_string(get_string('newhtmlblock', 'block_profileselectorhtml'));
         }
@@ -109,24 +111,24 @@ class block_profileselectorhtml extends block_base {
 
         if ($rules) {
             $res = false;
-            $match_count = 0;
+            $matchcount = 0;
             foreach ($rules as $rule) {
                 $res = self::check_rule_match($rule);
 
                 if (@$res) {
-                    $match_count ++;
+                    $matchcount ++;
                     $rule->text_match = file_rewrite_pluginfile_urls($rule->text_match, 'pluginfile.php', $this->context->id,
-                                                                     'block_profileselectorhtml', 'text_match', $match_count);
+                                                                     'block_profileselectorhtml', 'text_match', $matchcount);
                     $this->content->text .= format_text(@$rule->text_match, FORMAT_HTML, $filteropt);
                 }
             }
 
             if (((has_capability('moodle/course:manageactivities', $coursecontext)) ||
                     (has_capability('block/profileselectorhtml:editcontent', $blockcontext) &&
-                            !@$this->config->lockcontent)) && $match_count > 0) {
-               $params = array('sesskey' => sesskey(), 'id' => $this->instance->id, 'course' => $COURSE->id);
-               $editcontenturl = new moodle_url('/blocks/profileselectorhtml/edit.php', $params);
-               $this->content->footer = ' <a href="'.$editcontenturl.'">'.$streditcontent.'</a>';
+                            !@$this->config->lockcontent)) && $matchcount > 0) {
+                $params = array('sesskey' => sesskey(), 'id' => $this->instance->id, 'course' => $COURSE->id);
+                $editcontenturl = new moodle_url('/blocks/profileselectorhtml/edit.php', $params);
+                $this->content->footer = ' <a href="'.$editcontenturl.'">'.$streditcontent.'</a>';
             }
             if (!$res) {
                 $this->config->text_nomatch = file_rewrite_pluginfile_urls($this->config->text_nomatch, 'pluginfile.php',
@@ -170,7 +172,7 @@ class block_profileselectorhtml extends block_base {
             $op1 = 'op1_'.$i;
             $rule->op1 = $data->{$op1};
 
-            $value1 =  'value1_'.$i;
+            $value1 = 'value1_'.$i;
             $rule->value1 = $data->{$value1};
 
             $op = 'op'.$i;
@@ -185,10 +187,10 @@ class block_profileselectorhtml extends block_base {
             $value2 = 'value2_'.$i;
             $rule->value2 = $data->{$value2};
 
-            $text_match = 'text_match_'.$i;
-            $rule->text_match = file_save_draft_area_files($data->{$text_match}['itemid'], $this->context->id,
+            $textmatch = 'text_match_'.$i;
+            $rule->text_match = file_save_draft_area_files($data->{$textmatch}['itemid'], $this->context->id,
                                                            'block_profileselectorhtml', 'text_match', $i, array('subdirs' => true),
-                                                           $data->{$text_match}['text']);
+                                                           $data->{$textmatch}['text']);
 
             $rule->course = $COURSE->id;
             $rule->blockid = $this->instance->id;
@@ -226,7 +228,7 @@ class block_profileselectorhtml extends block_base {
         }
         if (!empty($rule->field1)) {
             if (is_numeric($rule->field1) && $rule->field1 > 0) {
-                $uservalue = $DB->get_field('user_info_data', 'data', array('fieldid' => $rule->field1, 'userid' => $USER->id)); 
+                $uservalue = $DB->get_field('user_info_data', 'data', array('fieldid' => $rule->field1, 'userid' => $USER->id));
             } else {
                 $stduserfield = $rule->field1;
                 $uservalue = $USER->$stduserfield;
@@ -234,13 +236,20 @@ class block_profileselectorhtml extends block_base {
         }
 
         if ($rule->op1 == '~=') {
-            $expr = "\$res1 = preg_match('/{$rule->value1}/', '{$uservalue}') ;";
+            $inputs = array();
+            $inputs['pattern'] = $rule->value1;
+            $inputs['value'] = $uservalue;
+            $expr = 'preg_match(\'/\$pattern/\', \'\$value\')';
         } else {
-            $expr = "\$res1 = '{$uservalue}' {$rule->op1} '{$rule->value1}' ;";
+            $inputs = array();
+            $inputs['value'] = $uservalue;
+            $inputs['op'] = $rule->op1;
+            $inputs['refvalue'] = $rule->value1;
+            $expr = "'\$value' \$op '\$refvalue'";
         }
 
         $res = null;
-        @eval($expr);
+        block_profileselectorhtml_eval($expr, $inputs, $res1);
 
         if (@$rule->operation) {
 
@@ -255,11 +264,18 @@ class block_profileselectorhtml extends block_base {
             }
 
             if ($rule->op2 == '~=') {
-                $expr = "\$res2 =(int) preg_match('/{$rule->value2}/', '{$uservalue}'}) ;";
+                $inputs = array();
+                $inputs['value'] = $uservalue;
+                $inputs['pattern'] = $rule->value2;
+                $expr = '(int) preg_match(\'/\$pattern/\', \'\$uservalue\')';
             } else {
-                $expr = "\$res2 ='{$uservalue}' {$rule->op1} '{$rule->value2}' ;";
+                $inputs = array();
+                $inputs['value'] = $uservalue;
+                $inputs['op'] = $rule->op2;
+                $inputs['reference'] = $rule->value2;
+                $expr = "'{\$uservalue}' {\$op} '{\$reference}'";
             }
-            @eval($expr);
+            block_profileselectorhtml_eval($expr, $inputs, $res2);
 
             if (!@$res2) {
                 $res2 = 0;
@@ -269,8 +285,12 @@ class block_profileselectorhtml extends block_base {
                 $res1 = 0;
             }
 
-            $finalexpr = "\$res =(bool) ($res1 {$rule->operation} $res2) ;";
-            @eval($finalexpr);
+            $finalexpr = "(bool) (\$res1 {\$op} \$res2)";
+            $inputs = array();
+            $inputs['res1'] = $res1;
+            $inputs['res2'] = $res2;
+            $inputs['op'] = $rule->op;
+            block_profileselectorhtml_eval($finalexpr, $inputs, $res);
         } else {
             $res = @$res1;
         }
