@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<libraries>
+  <library>
+    <location>extralib</location>
+    <name>Libraries outside code checked rules</name>
+    <license>GPL</license>
+    <version>3.0</version>
+    <licenseversion></licenseversion>
+  </library>
+  <library>
+    <location>js/dhtmlx</location>
+    <name>DHTMLX Widgets</name>
+    <license>MIT</license>
+    <version></version>
+    <licenseversion></licenseversion>
+  </library>
+</libraries>

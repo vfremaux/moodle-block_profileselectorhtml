@@ -79,8 +79,8 @@ if ($data = $mform->get_data()) {
         }
 
         $tm = 'text_match_'.$i;
-        $draftid_editor = file_get_submitted_draft_itemid($tm);
-        $rule->text_match  = file_save_draft_area_files($draftid_editor, $blockcontext->id, 'block_profileselectorhtml',
+        $draftideditor = file_get_submitted_draft_itemid($tm);
+        $rule->text_match  = file_save_draft_area_files($draftideditor, $blockcontext->id, 'block_profileselectorhtml',
                                                         'text_match', $i, null, $data->{$tm}['text']);
         $DB->update_record('block_profileselectorhtml_r', $rule);
 
@@ -102,9 +102,9 @@ $url = new moodle_url('/blocks/profileselectorhtml/edit.php', $params);
 $PAGE->set_url($url);
 $PAGE->set_title($SITE->fullname);
 $PAGE->set_heading($SITE->shortname);
-$system_context = context_system::instance();
+$systemcontext = context_system::instance();
 
-$PAGE->set_context($system_context);
+$PAGE->set_context($systemcontext);
 
 echo $OUTPUT->header();
 echo $OUTPUT->heading(get_string('editcontent', 'block_profileselectorhtml'));
