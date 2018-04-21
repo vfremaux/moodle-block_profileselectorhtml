@@ -17,13 +17,22 @@
 /**
  * Form for editing HTML block instances.
  *
- * @package   block_profilespecifichtml
- * @copyright 2012 Valery Fremaux (valery.fremaux@gmail.com)
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @version   Moodle 2.x
+ * @package     block_profilespecifichtml
+ * @category    blocks
+ * @copyright   2012 Valery Fremaux (valery.fremaux@gmail.com)
+ * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+defined('MOODLE_INTERNAL') || die();
 
-function block_profileselectorhtml_pluginfile($course, $birecord_or_cm, $context, $filearea, $args, $forcedownload) {
+/**
+ * This function is not implemented in this plugin, but is needed to mark
+ * the vf documentation custom volume availability.
+ */
+function block_profileselectorhtml_supports_feature($feature) {
+    assert(1);
+}
+
+function block_profileselectorhtml_pluginfile($course, $birecordorcm, $context, $filearea, $args, $forcedownload) {
     global $SCRIPT;
 
     if ($context->contextlevel != CONTEXT_BLOCK) {
@@ -47,11 +56,12 @@ function block_profileselectorhtml_pluginfile($course, $birecord_or_cm, $context
     $filename = array_pop($args);
     $filepath = $args ? '/'.implode('/', $args).'/' : '/';
 
-    if (!$file = $fs->get_file($context->id, 'block_profileselectorhtml', $filearea, $itemid, $filepath, $filename) or $file->is_directory()) {
+    if (!($file = $fs->get_file($context->id, 'block_profileselectorhtml', $filearea, $itemid, $filepath, $filename)) ||
+             $file->is_directory()) {
         send_file_not_found();
     }
 
-    if ($parentcontext = context::instance_by_id($birecord_or_cm->parentcontextid)) {
+    if ($parentcontext = context::instance_by_id($birecordorcm->parentcontextid)) {
         if ($parentcontext->contextlevel == CONTEXT_USER) {
             /*
              * Force download on all personal pages including /my/
@@ -60,12 +70,12 @@ function block_profileselectorhtml_pluginfile($course, $birecord_or_cm, $context
             $forcedownload = true;
         }
     } else {
-        // Weird, there should be parent context, better force dowload then.
+        // Weird! there should be parent context, better force dowload then.
         $forcedownload = true;
     }
 
     session_get_instance()->write_close();
-    send_stored_file($file, 60*60, 0, $forcedownload);
+    send_stored_file($file, 60 * 60, 0, $forcedownload);
 }
 
 /**
@@ -79,7 +89,7 @@ function block_profileselectorhtml_global_db_replace($search, $replace) {
 
     $instances = $DB->get_recordset('block_instances', array('blockname' => 'profileselectorhtml'));
     foreach ($instances as $instance) {
-        // TODO: intentionally hardcoded until MDL-26800 is fixed
+        // TODO: intentionally hardcoded until MDL-26800 is fixed.
         $config = unserialize(base64_decode($instance->configdata));
         $commit = false;
         if (isset($config->text_all) and is_string($config->text_all)) {

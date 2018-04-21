@@ -20,6 +20,7 @@
  * @copyright 2003 onwards Eloy Lafuente (stronk7) {@link http://stronk7.com}
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot.'/blocks/profileselectorhtml/backup/moodle2/restore_profileselectorhtml_stepslib.php');
 
@@ -35,7 +36,8 @@ class restore_profileselectorhtml_block_task extends restore_block_task {
     }
 
     protected function define_my_steps() {
-        $this->add_step(new restore_profileselectorhtml_block_structure_step('profileselectorhtml_structure', 'profileselectorhtml.xml'));
+        $step = new restore_profileselectorhtml_block_structure_step('profileselectorhtml_structure', 'profileselectorhtml.xml');
+        $this->add_step($step);
     }
 
     public function get_fileareas() {
@@ -43,7 +45,7 @@ class restore_profileselectorhtml_block_task extends restore_block_task {
     }
 
     public function get_configdata_encoded_attributes() {
-        return array('text_nomatch', 'text_all'); // We need to encode some attrs in configdata
+        return array('text_nomatch', 'text_all'); // We need to encode some attrs in configdata.
     }
 
     static public function define_decode_contents() {
