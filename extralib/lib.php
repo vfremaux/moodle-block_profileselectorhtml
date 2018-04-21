@@ -1,8 +1,12 @@
 <?php
 
-block_profileselector_eval($expression, $inputs, &$result) {
+function block_profileselectorhtml_eval($expression, $inputs, &$result) {
 
-    extract($input);
+    if (!is_array($inputs)) {
+        return;
+    }
+
+    extract($inputs);
 
     /*
      * Add a real $ to expression so if expression is f.e.

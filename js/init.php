@@ -14,6 +14,14 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+/**
+ * @package   block_profileselectorhtml
+ * @category  blocks
+ * @author    Wafa Adham (admin@adham.ps)
+ * @author    Valery Fremaux (valery.fremaux@gmail.com)
+ * @copyright 2012 Valery Fremaux
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 require('../../../config.php');
 
 $blockid = optional_param('bui_editid', null, PARAM_INT);
