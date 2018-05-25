@@ -243,15 +243,14 @@ class block_profileselectorhtml extends block_base {
         } else {
             $inputs = array();
             $inputs['value'] = $uservalue;
-            $inputs['op'] = $rule->op1;
             $inputs['refvalue'] = $rule->value1;
-            $expr = "'\$value' \$op '\$refvalue'";
+            $expr = "'\$value' {$rule->op1} '\$refvalue'";
         }
 
         $res = null;
         block_profileselectorhtml_eval($expr, $inputs, $res1);
 
-        if (@$rule->operation) {
+        if (!empty($rule->op)) {
 
             if (!empty($rule->field2)) {
                 if (is_numeric($rule->field2) && $rule->field2 > 0) {
@@ -271,9 +270,8 @@ class block_profileselectorhtml extends block_base {
             } else {
                 $inputs = array();
                 $inputs['value'] = $uservalue;
-                $inputs['op'] = $rule->op2;
                 $inputs['reference'] = $rule->value2;
-                $expr = "'{\$uservalue}' {\$op} '{\$reference}'";
+                $expr = "'{\$uservalue}' {$rule->op2} '{\$reference}'";
             }
             block_profileselectorhtml_eval($expr, $inputs, $res2);
 
@@ -285,11 +283,10 @@ class block_profileselectorhtml extends block_base {
                 $res1 = 0;
             }
 
-            $finalexpr = "(bool) (\$res1 {\$op} \$res2)";
+            $finalexpr = "(bool) (\$res1 {$rule->op} \$res2)";
             $inputs = array();
             $inputs['res1'] = $res1;
             $inputs['res2'] = $res2;
-            $inputs['op'] = $rule->op;
             block_profileselectorhtml_eval($finalexpr, $inputs, $res);
         } else {
             $res = @$res1;
