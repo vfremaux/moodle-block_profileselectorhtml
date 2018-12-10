@@ -22,8 +22,17 @@
  * @copyright   2012 Valery Fremaux (valery.fremaux@gmail.com)
  * @license     http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+defined('MOODLE_INTERNAL') || die();
 
-function block_profileselectorhtml_pluginfile($course, $birecord_or_cm, $context, $filearea, $args, $forcedownload) {
+/**
+ * This function is not implemented in this plugin, but is needed to mark
+ * the vf documentation custom volume availability.
+ */
+function block_profileselectorhtml_supports_feature($feature) {
+    assert(1);
+}
+
+function block_profileselectorhtml_pluginfile($course, $birecordorcm, $context, $filearea, $args, $forcedownload) {
     global $SCRIPT;
 
     if ($context->contextlevel != CONTEXT_BLOCK) {
@@ -47,11 +56,12 @@ function block_profileselectorhtml_pluginfile($course, $birecord_or_cm, $context
     $filename = array_pop($args);
     $filepath = $args ? '/'.implode('/', $args).'/' : '/';
 
-    if (!$file = $fs->get_file($context->id, 'block_profileselectorhtml', $filearea, $itemid, $filepath, $filename) or $file->is_directory()) {
+    if (!($file = $fs->get_file($context->id, 'block_profileselectorhtml', $filearea, $itemid, $filepath, $filename)) ||
+             $file->is_directory()) {
         send_file_not_found();
     }
 
-    if ($parentcontext = context::instance_by_id($birecord_or_cm->parentcontextid)) {
+    if ($parentcontext = context::instance_by_id($birecordorcm->parentcontextid)) {
         if ($parentcontext->contextlevel == CONTEXT_USER) {
             /*
              * Force download on all personal pages including /my/

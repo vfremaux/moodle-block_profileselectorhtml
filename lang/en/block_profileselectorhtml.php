@@ -27,6 +27,9 @@ $string['profileselectorhtml:addinstance'] = 'Can add instance';
 $string['profileselectorhtml:myaddinstance'] = 'Can add instance to My page';
 $string['profileselectorhtml:editcontent'] = 'Can edit accessible content';
 
+// Privacy.
+$string['privacy:metadata'] = 'The Profile Selector HTML Block does not directly store any personal data about any user.';
+
 $string['blockname'] = 'HTML (on profile field selector)';
 $string['pluginname'] = 'HTML (on profile field selector)';
 $string['newhtmlblock'] = 'New Profile Selector Html Block';

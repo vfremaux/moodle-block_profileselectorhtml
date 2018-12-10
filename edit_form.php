@@ -45,12 +45,12 @@ class block_profileselectorhtml_edit_form extends block_edit_form {
         $rulesarr = array_values($rules);
 
         if ($rc) {
-            $rules_count = $rc;
+            $rulescount = $rc;
         } else if (count($rules) > 0) {
-            $rules_count = count($rules);
-            $this->block->config->rulescount = $rules_count;
+            $rulescount = count($rules);
+            $this->block->config->rulescount = $rulescount;
         } else {
-            $rules_count = 1;
+            $rulescount = 1;
             // Unset config.
             unset($this->block->config);
         }
@@ -98,7 +98,7 @@ class block_profileselectorhtml_edit_form extends block_edit_form {
         $mform->setType('config_lockcontent', PARAM_BOOL);
 
         $button = '<div style="text-align:right;">';
-        $params = array('id' => $id, 'sesskey' => sesskey(), 'bui_editid' => $blockid, 'rc' => ($rules_count + 1));
+        $params = array('id' => $id, 'sesskey' => sesskey(), 'bui_editid' => $blockid, 'rc' => ($rulescount + 1));
         if ($COURSE->id > SITEID) {
             $newruleurl = new moodle_url('/course/view.php', $params);
         } else if ($PAGE->pagetype == 'my-index') {
@@ -107,11 +107,11 @@ class block_profileselectorhtml_edit_form extends block_edit_form {
             $newruleurl = new moodle_url('/index.php', $params);
         }
 
-        for ($i = 1; $i <= $rules_count + 1; $i++) {
+        for ($i = 1; $i <= $rulescount + 1; $i++) {
 
             $mform->addElement('header', 'configheader'.$i, get_string('rule', 'block_profileselectorhtml').$i);
             $mform->addElement('hidden', 'ruleid_'.$i);
-            $mform->setType('ruleid_'.$i, PARAM_RAW); 
+            $mform->setType('ruleid_'.$i, PARAM_RAW);
 
             $mform->addElement('text', 'config_rulename'.$i, get_string('configrulename', 'block_profileselectorhtml'));
             $mform->setType('config_rulename'.$i, PARAM_MULTILANG);
@@ -127,14 +127,14 @@ class block_profileselectorhtml_edit_form extends block_edit_form {
 
             $label = get_string('configprofileop', 'block_profileselectorhtml');
             $mform->addElement('select', 'config_op'.$i, $label, $clauseopoptions);
-            $mform->setType('config_op'.$i, PARAM_RAW); 
+            $mform->setType('config_op'.$i, PARAM_RAW);
 
             $group2[0] = &$mform->createElement('select', 'config_field2_'.$i, '', $fieldoptions);
             $group2[1] = &$mform->createElement('select', 'config_op2_'.$i, '', $fieldopoptions);
             $group2[2] = &$mform->createElement('text', 'config_value2_'.$i, '', array('size' => 30));
-            $mform->setType('config_field2_'.$i, PARAM_RAW); 
-            $mform->setType( 'config_op2_'.$i, PARAM_RAW); 
-            $mform->setType('config_value2_'.$i, PARAM_RAW); 
+            $mform->setType('config_field2_'.$i, PARAM_RAW);
+            $mform->setType( 'config_op2_'.$i, PARAM_RAW);
+            $mform->setType('config_value2_'.$i, PARAM_RAW);
 
             $label = get_string('configprofilefield2', 'block_profileselectorhtml');
             $mform->addGroup($group2, 'group2_'.$i, $label, array('&nbsp;'), false);
@@ -169,20 +169,22 @@ class block_profileselectorhtml_edit_form extends block_edit_form {
 
         // Rules count.
 
-        $mform->addElement('hidden','config_rulescount', $rules_count);
-        $mform->addElement('hidden', 'rc', $rules_count);
+        $mform->addElement('hidden', 'config_rulescount', $rulescount);
+        $mform->addElement('hidden', 'rc', $rulescount);
         $mform->addElement('hidden', 'blockid', $blockid);
 
-        $mform->setType('config_rulescount', PARAM_RAW); 
-        $mform->setType( 'rc', PARAM_RAW); 
-        $mform->setType('blockid', PARAM_RAW); 
+        $mform->setType('config_rulescount', PARAM_RAW);
+        $mform->setType('rc', PARAM_RAW);
+        $mform->setType('blockid', PARAM_RAW);
 
-        $mform->addElement('header', 'otheroptions', get_string('other_options','block_profileselectorhtml'));
-        $mform->addElement('editor', 'config_text_nomatch', get_string('configcontentwhennomatch', 'block_profileselectorhtml'), null, $editoroptions);
-        $mform->setType('config_text_nomatch', PARAM_RAW); // XSS is prevented when printing the block contents and serving files
+        $mform->addElement('header', 'otheroptions', get_string('other_options', 'block_profileselectorhtml'));
+        $label = get_string('configcontentwhennomatch', 'block_profileselectorhtml');
+        $mform->addElement('editor', 'config_text_nomatch', $label, null, $editoroptions);
+        $mform->setType('config_text_nomatch', PARAM_RAW); // XSS is prevented when printing the block contents and serving files.
 
-        $mform->addElement('editor', 'config_text_all', get_string('configcontentforall', 'block_profileselectorhtml'), null, $editoroptions);
-        $mform->setType('config_text_all', PARAM_RAW); // XSS is prevented when printing the block contents and serving files
+        $label = get_string('configcontentforall', 'block_profileselectorhtml');
+        $mform->addElement('editor', 'config_text_all', $label, null, $editoroptions);
+        $mform->setType('config_text_all', PARAM_RAW); // XSS is prevented when printing the block contents and serving files.
 
     }
 
@@ -208,36 +210,40 @@ class block_profileselectorhtml_edit_form extends block_edit_form {
              $this->block->config->rulescount = 1;
         }
 
-        $text_all = '';
-        $text_match = '';
-        $text_nomatch = '';
+        $textall = '';
+        $textmatch = '';
+        $textnomatch = '';
 
         // Handle now (text_all , text_notmatch) they are stored in the config.
         if (!empty($this->block->config) && is_object($this->block->config)) {
 
             // Draft file handling for all.
-            $text_all = $this->block->config->text_all;
-            $draftid_editor = file_get_submitted_draft_itemid('config_text_all');
-            if (empty($text_all)) {
+            $textall = $this->block->config->text_all;
+            $draftideditor = file_get_submitted_draft_itemid('config_text_all');
+            if (empty($textall)) {
                 $currenttext = '';
             } else {
-                $currenttext = $text_all;
+                $currenttext = $textall;
             }
 
-            $defaults->config_text_all['text'] = file_prepare_draft_area($draftid_editor, $this->block->context->id, 'block_profileselectorhtml', 'text_all', 0, array('subdirs' => true), $currenttext);
-            $defaults->config_text_all['itemid'] = $draftid_editor;
+            $defaults->config_text_all['text'] = file_prepare_draft_area($draftideditor, $this->block->context->id,
+                                                                         'block_profileselectorhtml',
+                                                                         'text_all', 0, array('subdirs' => true), $currenttext);
+            $defaults->config_text_all['itemid'] = $draftideditor;
             $defaults->config_text_all['format'] = @$this->block->config->format;
 
             // Draft file handling for no matching.
-            $text_nomatch = $this->block->config->text_nomatch;
-            $draftid_editor = file_get_submitted_draft_itemid('config_text_nomatch');
-            if (empty($text_nomatch)) {
+            $textnomatch = $this->block->config->text_nomatch;
+            $draftideditor = file_get_submitted_draft_itemid('config_text_nomatch');
+            if (empty($textnomatch)) {
                 $currenttext = '';
             } else {
-                $currenttext = $text_nomatch;
+                $currenttext = $textnomatch;
             }
-            $defaults->config_text_nomatch['text'] = file_prepare_draft_area($draftid_editor, $this->block->context->id, 'block_profileselectorhtml', 'text_nomatch', 0, array('subdirs' => true), $currenttext);
-            $defaults->config_text_nomatch['itemid'] = $draftid_editor;
+            $defaults->config_text_nomatch['text'] = file_prepare_draft_area($draftideditor, $this->block->context->id,
+                                                                             'block_profileselectorhtml',
+                                                                             'text_nomatch', 0, array('subdirs' => true), $currenttext);
+            $defaults->config_text_nomatch['itemid'] = $draftideditor;
             $defaults->config_text_nomatch['format'] = @$this->block->config->format;
 
             if (!$this->block->user_can_edit() && !empty($this->block->config->title)) {
@@ -257,21 +263,23 @@ class block_profileselectorhtml_edit_form extends block_edit_form {
             $i = 1;
 
             foreach ($rules as $rule) {
-                $text_match = $rule->text_match;
-                $draftid_editor = file_get_submitted_draft_itemid('config_text_match_'.$i);
-                if (empty($text_match)) {
+                $textmatch = $rule->text_match;
+                $draftideditor = file_get_submitted_draft_itemid('config_text_match_'.$i);
+                if (empty($textmatch)) {
                     $currenttext = '';
                 } else {
-                    $currenttext = $text_match;
+                    $currenttext = $textmatch;
                 }
                 $ctm = 'config_text_match_'.$i;
-                $defaults->{$ctm}['text'] = file_prepare_draft_area($draftid_editor, $this->block->context->id, 'block_profileselectorhtml', 'text_match', $i, array('subdirs' => true), $currenttext);
-                $defaults->{$ctm}['itemid'] = $draftid_editor;
+                $defaults->{$ctm}['text'] = file_prepare_draft_area($draftideditor, $this->block->context->id,
+                                                                    'block_profileselectorhtml',
+                                                                    'text_match', $i, array('subdirs' => true), $currenttext);
+                $defaults->{$ctm}['itemid'] = $draftideditor;
                 $defaults->{$ctm}['format'] = @$this->block->config->format;
 
                 $tm = "text_match_".$i;
 
-                $this->block->config->{$tm}['text'] = $text_match;
+                $this->block->config->{$tm}['text'] = $textmatch;
 
                 $rulename = "rulename".$i;
                 $defaults->{$rulename} = $rule->name;
@@ -290,20 +298,20 @@ class block_profileselectorhtml_edit_form extends block_edit_form {
                 $this->block->config->{$value1} = $rule->value1;
 
                 $op = "op".$i;
-                $defaults->{$op}=$rule->operation;
+                $defaults->{$op} = $rule->operation;
                 $this->block->config->{$op} = $rule->operation;
 
-                $field2= "field2_".$i;
-                $defaults->{$field2}=$rule->field2;
+                $field2 = "field2_".$i;
+                $defaults->{$field2} = $rule->field2;
                 $this->block->config->{$field2} = $rule->field2;
- 
+
                 $op2 = "op2_".$i;
-                $defaults->{$op2}=$rule->op2;
+                $defaults->{$op2} = $rule->op2;
                 $this->block->config->{$op2} = $rule->op2;
 
                 $value2 = "value2_".$i;
                 $defaults->{$value2} = $rule->value2;
-                $this->block->config->{$value2} = $rule->value2 ;
+                $this->block->config->{$value2} = $rule->value2;
 
                 $ruleid = "ruleid_".$i;
                 $defaults->{$ruleid} = $rule->id;
@@ -325,8 +333,8 @@ class block_profileselectorhtml_edit_form extends block_edit_form {
 
         // Restore $text in each.
         $this->block->config = new StdClass;
-        $this->block->config->text_all = $text_all;
-        $this->block->config->text_nomatch = $text_nomatch;
+        $this->block->config->text_all = $textall;
+        $this->block->config->text_nomatch = $textnomatch;
 
         if (isset($title)) {
             // Reset the preserved title.
