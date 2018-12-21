@@ -14,6 +14,11 @@ function block_profileselectorhtml_eval($expression, $inputs, &$result) {
      * then we evaluate :
      * "$result = $imagecount > 2"
      */
+<<<<<<< HEAD
     eval("\$result = {$expression};");
 
+=======
+    $evaled = "\$result = {$expression};";
+    eval($evaled);
+>>>>>>> MOODLE_36_STABLE
 }

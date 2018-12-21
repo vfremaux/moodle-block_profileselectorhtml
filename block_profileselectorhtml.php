@@ -25,6 +25,10 @@
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot.'/blocks/profileselectorhtml/extralib/lib.php');
+<<<<<<< HEAD
+=======
+require_once($CFG->dirroot.'/lib/filelib.php');
+>>>>>>> MOODLE_36_STABLE
 
 class block_profileselectorhtml extends block_base {
 
@@ -244,7 +248,11 @@ class block_profileselectorhtml extends block_base {
             $inputs = array();
             $inputs['value'] = $uservalue;
             $inputs['refvalue'] = $rule->value1;
+<<<<<<< HEAD
             $expr = "'\$value' {$rule->op1} '\$refvalue'";
+=======
+            $expr = "\"\$value\" {$rule->op1} \"\$refvalue\"";
+>>>>>>> MOODLE_36_STABLE
         }
 
         $res = null;
@@ -271,7 +279,11 @@ class block_profileselectorhtml extends block_base {
                 $inputs = array();
                 $inputs['value'] = $uservalue;
                 $inputs['reference'] = $rule->value2;
+<<<<<<< HEAD
                 $expr = "'{\$uservalue}' {$rule->op2} '{\$reference}'";
+=======
+                $expr = "\"{\$uservalue}\" {$rule->op2} \"{\$reference}\"";
+>>>>>>> MOODLE_36_STABLE
             }
             block_profileselectorhtml_eval($expr, $inputs, $res2);
 
