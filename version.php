@@ -27,20 +27,11 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->version   = 2016083100;        // The current plugin version (Date: YYYYMMDDXX).
-<<<<<<< HEAD
-$plugin->requires  = 2018042700;        // Requires this Moodle version.
+$plugin->requires  = 2019051100;        // Requires this Moodle version.
 $plugin->component = 'block_profileselectorhtml';  // Full name of the plugin (used for diagnostics).
 $plugin->maturity = MATURITY_RC;
-$plugin->release = '3.5.0 (build 2016083100)';
+$plugin->release = '3.7.0 (build 2016083100)';
 
 // Non moodle attributes.
-$plugin->codeincrement = '3.5.0000';
-=======
-$plugin->requires  = 2018112800;        // Requires this Moodle version.
-$plugin->component = 'block_profileselectorhtml';  // Full name of the plugin (used for diagnostics).
-$plugin->maturity = MATURITY_RC;
-$plugin->release = '3.6.0 (build 2016083100)';
-
-// Non moodle attributes.
-$plugin->codeincrement = '3.6.0000';
->>>>>>> MOODLE_36_STABLE
+$plugin->codeincrement = '3.7.0000';
+$plugin->privacy = 'public';
