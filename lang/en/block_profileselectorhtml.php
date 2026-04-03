@@ -32,6 +32,7 @@ $string['privacy:metadata'] = 'The Profile Selector HTML Block does not directly
 
 $string['blockname'] = 'HTML (on profile field selector)';
 $string['pluginname'] = 'HTML (on profile field selector)';
+$string['pluginname_help'] = 'Distributes content on base of values of some profile field.';
 $string['newhtmlblock'] = 'New Profile Selector Html Block';
 $string['leaveblanktohide'] = 'Leave blank to hide';
 $string['configtitle'] = 'Visible title of the block';

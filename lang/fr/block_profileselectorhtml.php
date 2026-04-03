@@ -29,6 +29,7 @@ $string['profileselectorhtml:editcontent'] = 'Peut éditer les rubriques accessi
 
 $string['blockname'] = 'HTML (sur selecteur de valeur de profil)';
 $string['pluginname'] = 'HTML (sur selecteur de valeur de profil)';
+$string['pluginname_help'] = 'Pour distribuer des contenu libres différents suivant le contenu d\'un champ de profil.';
 $string['newhtmlblock'] = 'Nouveau bloc Html sur valeur de profil';
 $string['leaveblanktohide'] = 'Laisser vide pour cacher';
 $string['configtitle'] = 'Titre visible du bloc';
